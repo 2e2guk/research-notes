@@ -4,6 +4,9 @@ title: "논문 제목"
 description: "핵심 질문과 이 글에서 다루는 내용"
 tags: []
 categories: [paper-notes]
+topic: vla
+series: OpenVLA 읽기
+series_order: 10
 related_posts: false
 toc:
   sidebar: right

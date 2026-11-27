@@ -1,0 +1,16 @@
+{% assign ordered_posts = include.posts | sort: 'title' | sort: 'series_order', 'last' %}
+<ol class="reading-posts">
+  {% for entry in ordered_posts %}
+  <li>
+    <a class="reading-post-title" data-post-link href="{{ entry.url | relative_url }}">{{ entry.title | escape }}</a>
+    {% if entry.description %}<p class="reading-post-description">{{ entry.description | escape }}</p>{% endif %}
+    {% if entry.tags.size > 0 %}
+    <div class="reading-post-tags" aria-label="글 태그">
+      {% for tag in entry.tags %}
+      <a href="{{ tag | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">#{{ tag | escape }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ol>

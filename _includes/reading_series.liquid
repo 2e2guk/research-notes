@@ -1,0 +1,23 @@
+{% assign series_groups = include.posts | group_by: 'series' | sort: 'name' %}
+{% for group in series_groups %}
+  {% if group.name != '' %}
+  <section class="reading-series" data-series="{{ group.name | escape }}">
+    <div class="reading-series-heading">
+      <h3>{{ group.name | escape }}</h3>
+      <span class="reading-count">{{ group.items.size }}편</span>
+    </div>
+    {% include reading_post_list.liquid posts=group.items %}
+  </section>
+  {% endif %}
+{% endfor %}
+{% for group in series_groups %}
+  {% if group.name == '' %}
+  <section class="reading-series" data-series="">
+    <div class="reading-series-heading">
+      <h3>개별 기록</h3>
+      <span class="reading-count">{{ group.items.size }}편</span>
+    </div>
+    {% include reading_post_list.liquid posts=group.items %}
+  </section>
+  {% endif %}
+{% endfor %}

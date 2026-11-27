@@ -32,10 +32,16 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Verify reading order and tag navigation
+        env:
+          JEKYLL_ENV: production
+        run: python3 scripts/check_reading_navigation.py
       - name: Build site
         env:
           JEKYLL_ENV: production
         run: bundle exec jekyll build --trace
+      - name: Verify published content excludes test fixtures
+        run: python3 scripts/check_reading_navigation.py --production-dir _site
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:

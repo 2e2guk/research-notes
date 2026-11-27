@@ -1,0 +1,48 @@
+<nav class="reading-quicklinks" aria-label="기록 탐색">
+  <a href="{{ '/tags/' | relative_url }}">태그로 찾아보기</a>
+  <a href="{{ '/blog/' | relative_url }}">전체 글 <span>{{ site.posts.size }}</span></a>
+</nav>
+
+<nav class="reading-topics" aria-label="주제별 목차">
+{% for topic in site.data.topics %}
+  {% assign topic_posts = site.posts | where: 'topic', topic.id %}
+  <a class="reading-topic-card" href="#topic-{{ topic.id }}">
+    <span class="reading-count">{{ topic_posts.size }}편의 기록</span>
+    <span class="reading-topic-title">{{ topic.title | escape }}</span>
+    <span class="reading-topic-description">{{ topic.description | escape }}</span>
+  </a>
+{% endfor %}
+</nav>
+
+<div class="reading-outline">
+{% for topic in site.data.topics %}
+  {% assign topic_posts = site.posts | where: 'topic', topic.id %}
+  <section class="reading-topic-section" id="topic-{{ topic.id }}" data-topic="{{ topic.id }}">
+    <div class="reading-topic-heading">
+      <h2>{{ topic.title | escape }}</h2>
+      <span class="reading-count">{{ topic_posts.size }}편</span>
+    </div>
+    {% if topic_posts.size > 0 %}
+      {% include reading_series.liquid posts=topic_posts %}
+    {% else %}
+      <p class="reading-empty">아직 공개한 글이 없습니다.</p>
+    {% endif %}
+  </section>
+{% endfor %}
+
+{% assign topic_ids = site.data.topics | map: 'id' %}
+{% assign other_posts = '' | split: ',' %}
+{% for entry in site.posts %}
+  {% unless topic_ids contains entry.topic %}
+    {% assign other_posts = other_posts | push: entry %}
+  {% endunless %}
+{% endfor %}
+{% if other_posts.size > 0 %}
+<section class="reading-topic-section" id="topic-other" data-topic="other">
+  <div class="reading-topic-heading">
+    <h2>그 밖의 기록</h2><span class="reading-count">{{ other_posts.size }}편</span>
+  </div>
+  {% include reading_series.liquid posts=other_posts %}
+</section>
+{% endif %}
+</div>
